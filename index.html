@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filter My Excel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Filter My Excel</h1>
+    <img src="filter-my-excel-logo.webp" alt="Filter My Excel Logo" class="logo">
+    <input type="file" id="fileInput" accept=".xlsx, .xls">
+    
+    <div>
+      <label for="itemSelect">Select Items:</label>
+      <select id="itemSelect" multiple></select>
+    </div>
+    <div>
+      <label for="territorySelect">Select Territories:</label>
+      <select id="territorySelect" multiple></select>
+    </div>
+    <button id="applyFilter">Apply Filter</button>
+    <div id="output"></div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
