@@ -6,9 +6,10 @@ document.getElementById("fileInput").addEventListener("change", async (event) =>
   const workbook = XLSX.read(data);
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
+  // محاولة استخراج البيانات
   let jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
 
-  // Skip invalid rows
+  // تجاوز الصفوف غير المفيدة
   let validRowIndex = jsonData.findIndex(row =>
     row.includes("Territory Name") ||
     row.includes("ZONE_NAME") ||
@@ -25,9 +26,11 @@ document.getElementById("fileInput").addEventListener("change", async (event) =>
     return;
   }
 
+  // اقتصاص البيانات بعد الصف الأول المفيد
   jsonData = jsonData.slice(validRowIndex);
   const headers = jsonData.shift();
 
+  // تحويل إلى JSON مع التحقق من الأعمدة
   const validData = jsonData.map(row => {
     const obj = {};
     headers.forEach((header, index) => {
@@ -36,62 +39,68 @@ document.getElementById("fileInput").addEventListener("change", async (event) =>
     return obj;
   });
 
-  const columnMapping = headers.includes("Product Name") && headers.includes("Territory Name") && headers.includes("Sales")
-    ? { item: "Product Name", territory: "Territory Name", qty: "Sales" }
-    : headers.includes("Item Name") && headers.includes("Territory Name") && headers.includes("QTY")
-    ? { item: "Item Name", territory: "Territory Name", qty: "QTY" }
-    : headers.includes("PRODUCT_NAME") && headers.includes("ZONE_NAME") && headers.includes("NET_QUANTITY")
-    ? { item: "PRODUCT_NAME", territory: "ZONE_NAME", qty: "NET_QUANTITY" }
-    : null;
+  // تحديد نوع الشيت بناءً على أسماء الأعمدة
+  let columnMapping = {};
+  const columnNames = Object.keys(validData[0]);
 
-  if (!columnMapping) {
+  if (columnNames.includes("Product Name") && columnNames.includes("Territory Name") && columnNames.includes("Sales")) {
+    columnMapping = { item: "Product Name", territory: "Territory Name", qty: "Sales" }; // PharmaOverseas
+  } else if (columnNames.includes("Item Name") && columnNames.includes("Territory Name") && columnNames.includes("QTY")) {
+    columnMapping = { item: "Item Name", territory: "Territory Name", qty: "QTY" }; // Ibnsina
+  } else if (columnNames.includes("PRODUCT_NAME") && columnNames.includes("ZONE_NAME") && columnNames.includes("NET_QUANTITY")) {
+    columnMapping = { item: "PRODUCT_NAME", territory: "ZONE_NAME", qty: "NET_QUANTITY" }; // ABOU KIR
+  } else {
     alert("Unknown file format");
     return;
   }
 
+  // استخراج القيم الفريدة وترتيبها أبجديًا
   const items = [...new Set(validData.map(row => row[columnMapping.item]).filter(Boolean))].sort();
   const territories = [...new Set(validData.map(row => row[columnMapping.territory]).filter(Boolean))].sort();
 
-  const itemSelect = $("#itemSelect").empty();
-  const territorySelect = $("#territorySelect").empty();
+  // القوائم المنسدلة
+  const itemSelect = document.getElementById("itemSelect");
+  const territorySelect = document.getElementById("territorySelect");
+
+  itemSelect.innerHTML = "";
+  territorySelect.innerHTML = "";
 
   items.forEach(item => {
-    itemSelect.append(new Option(item, item));
+    const option = document.createElement("option");
+    option.value = item;
+    option.textContent = item;
+    itemSelect.appendChild(option);
   });
 
   territories.forEach(territory => {
-    territorySelect.append(new Option(territory, territory));
+    const option = document.createElement("option");
+    option.value = territory;
+    option.textContent = territory;
+    territorySelect.appendChild(option);
   });
 
-  $(".select2").select2(); // تفعيل ميزة البحث داخل القوائم
-
-  $("#filterButton").off("click").on("click", () => {
-    const selectedItems = $("#itemSelect").val();
-    const selectedTerritories = $("#territorySelect").val();
+  document.getElementById("filterButton").addEventListener("click", () => {
+    const selectedItems = Array.from(itemSelect.selectedOptions).map(option => option.value);
+    const selectedTerritories = Array.from(territorySelect.selectedOptions).map(option => option.value);
 
     const filteredData = validData.filter(row =>
       selectedItems.includes(row[columnMapping.item]) &&
       selectedTerritories.includes(row[columnMapping.territory])
     );
 
-    const table = document.createElement("table");
-    const headerRow = table.insertRow();
-    [columnMapping.item, columnMapping.territory, columnMapping.qty].forEach(header => {
-      const th = document.createElement("th");
-      th.textContent = header;
-      headerRow.appendChild(th);
-    });
-
+    const result = {};
     filteredData.forEach(row => {
-      const tableRow = table.insertRow();
-      [columnMapping.item, columnMapping.territory, columnMapping.qty].forEach(col => {
-        const td = tableRow.insertCell();
-        td.textContent = row[col];
-      });
+      const key = `${row[columnMapping.item]} - ${row[columnMapping.territory]}`;
+      if (!result[key]) result[key] = 0;
+      result[key] += row[columnMapping.qty];
     });
 
     const output = document.getElementById("output");
-    output.innerHTML = "";
-    output.appendChild(table);
+    output.innerHTML = "<h3>Filtered Results:</h3>";
+    Object.entries(result).forEach(([key, qty]) => {
+      const p = document.createElement("p");
+      p.textContent = `${key}: ${qty} boxes`;
+      output.appendChild(p);
+    });
   });
 });
