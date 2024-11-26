@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filter My Sales</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/css/select2.min.css" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>Filter My Sales</h1>
+    <p>Upload your Excel file, select your territory and product name, and view your sales data.</p>
+  </header>
+
+  <main>
+    <input type="file" id="fileInput" />
+    <div class="filters">
+      <label for="itemSelect">Select Product Name(s):</label>
+      <select id="itemSelect" multiple></select>
+
+      <label for="territorySelect">Select Territory(ies):</label>
+      <select id="territorySelect" multiple></select>
+    </div>
+    <button id="filterButton">Filter</button>
+
+    <div id="output"></div>
+  </main>
+
+  <footer>
+    <p>Designed by Ahmed Gawish</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/js/select2.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
