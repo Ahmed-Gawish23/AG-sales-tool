@@ -16,14 +16,22 @@ body {
 
 h1 {
   color: #333;
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  text-align: center;
 }
 
 p {
   margin: 10px 0;
+  text-align: center;
 }
 
 input[type="file"] {
   margin: 10px 0;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #filters {
@@ -32,12 +40,14 @@ input[type="file"] {
 
 label {
   margin-right: 10px;
+  font-size: 16px;
 }
 
 select {
   margin-bottom: 10px;
-  padding: 5px;
+  padding: 10px;
   width: 100%;
+  font-size: 16px;
 }
 
 button {
@@ -47,6 +57,7 @@ button {
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
+  width: 100%;
 }
 
 button:hover {
@@ -58,4 +69,22 @@ footer {
   margin-top: 20px;
   font-size: 14px;
   color: #666;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 0;
+}
+
+#output table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#output table, th, td {
+  border: 1px solid #ddd;
+}
+
+#output th, td {
+  padding: 8px;
+  text-align: left;
 }
