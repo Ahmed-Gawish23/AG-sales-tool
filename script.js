@@ -6,17 +6,27 @@ document.getElementById("fileInput").addEventListener("change", async (event) =>
   const workbook = XLSX.read(data);
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-  // محاولة استخراج البيانات بعد الصفوف الفارغة أو المدمجة
+  // محاولة استخراج البيانات
   let jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
 
-  // تجاوز الصفوف التي تحتوي على خلايا مدمجة أو فارغة
-  let validRowIndex = jsonData.findIndex(row => row.some(cell => cell.trim() !== ""));
+  // تجاوز الصفوف غير المفيدة
+  let validRowIndex = jsonData.findIndex(row =>
+    row.includes("Territory Name") ||
+    row.includes("ZONE_NAME") ||
+    row.includes("Item Name") ||
+    row.includes("Product Name") ||
+    row.includes("PRODUCT_NAME") ||
+    row.includes("Sales") ||
+    row.includes("QTY") ||
+    row.includes("NET_QUANTITY")
+  );
+
   if (validRowIndex === -1) {
     alert("No valid data found in the file");
     return;
   }
 
-  // اقتصاص البيانات بعد الصف الأول الصحيح
+  // اقتصاص البيانات بعد الصف الأول المفيد
   jsonData = jsonData.slice(validRowIndex);
   const headers = jsonData.shift();
 
