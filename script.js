@@ -63,7 +63,7 @@ document.getElementById("fileInput").addEventListener("change", async (event) =>
     territorySelect.append(new Option(territory, territory));
   });
 
-  $(".select2").select2();
+  $(".select2").select2(); // تفعيل ميزة البحث داخل القوائم
 
   $("#filterButton").off("click").on("click", () => {
     const selectedItems = $("#itemSelect").val();
