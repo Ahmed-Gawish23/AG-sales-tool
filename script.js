@@ -6,10 +6,8 @@ document.getElementById("fileInput").addEventListener("change", async (event) =>
   const workbook = XLSX.read(data);
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-  // محاولة استخراج البيانات
   let jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
 
-  // تجاوز الصفوف غير المفيدة
   let validRowIndex = jsonData.findIndex(row =>
     row.includes("Territory Name") ||
     row.includes("ZONE_NAME") ||
@@ -26,11 +24,9 @@ document.getElementById("fileInput").addEventListener("change", async (event) =>
     return;
   }
 
-  // اقتصاص البيانات بعد الصف الأول المفيد
   jsonData = jsonData.slice(validRowIndex);
   const headers = jsonData.shift();
 
-  // تحويل إلى JSON مع التحقق من الأعمدة
   const validData = jsonData.map(row => {
     const obj = {};
     headers.forEach((header, index) => {
@@ -39,7 +35,6 @@ document.getElementById("fileInput").addEventListener("change", async (event) =>
     return obj;
   });
 
-  // تحديد نوع الشيت بناءً على أسماء الأعمدة
   let columnMapping = {};
   const columnNames = Object.keys(validData[0]);
 
@@ -54,11 +49,9 @@ document.getElementById("fileInput").addEventListener("change", async (event) =>
     return;
   }
 
-  // استخراج القيم الفريدة وترتيبها أبجديًا
   const items = [...new Set(validData.map(row => row[columnMapping.item]).filter(Boolean))].sort();
   const territories = [...new Set(validData.map(row => row[columnMapping.territory]).filter(Boolean))].sort();
 
-  // القوائم المنسدلة
   const itemSelect = document.getElementById("itemSelect");
   const territorySelect = document.getElementById("territorySelect");
 
@@ -97,10 +90,13 @@ document.getElementById("fileInput").addEventListener("change", async (event) =>
 
     const output = document.getElementById("output");
     output.innerHTML = "<h3>Filtered Results:</h3>";
+    let table = "<table><tr><th>Product Name - Territory</th><th>Quantity</th></tr>";
+
     Object.entries(result).forEach(([key, qty]) => {
-      const p = document.createElement("p");
-      p.textContent = `${key}: ${qty} boxes`;
-      output.appendChild(p);
+      table += `<tr><td>${key}</td><td>${qty} boxes</td></tr>`;
     });
+    
+    table += "</table>";
+    output.innerHTML += table;
   });
 });
