@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A.G Sales Filter</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/select2.min.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -20,14 +21,10 @@
 
         <div class="filters">
             <label for="territory">Select Territory:</label>
-            <select id="territory" multiple>
-                <option value="" disabled selected>Select a file first</option>
-            </select>
+            <select id="territory" multiple></select>
 
             <label for="product">Select Product:</label>
-            <select id="product" multiple>
-                <option value="" disabled selected>Select a file first</option>
-            </select>
+            <select id="product" multiple></select>
         </div>
 
         <button id="filter-btn">Filter</button>
@@ -46,6 +43,8 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/select2.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
