@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A.G Sales Filter</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A.G Sales Filter</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
 </head>
 <body>
-  <header>
-    <h1>A.G Sales Filter</h1>
-  </header>
-  <div class="container">
-    <p>Upload your Excel file, select your territory and product name, and view your sales data.</p>
-    <input type="file" id="fileInput" accept=".xlsx, .xls">
-    <br><br>
-
-    <label for="territorySelect">Select Territory:</label>
-    <select id="territorySelect" class="select2" multiple="multiple" style="width: 100%;"></select>
-    <br><br>
-
-    <label for="productSelect">Select Product:</label>
-    <select id="productSelect" class="select2" multiple="multiple" style="width: 100%;"></select>
-    <br><br>
-
-    <button id="filterButton">Filter Data</button>
-    <table id="results"></table>
-  </div>
-  <footer>
-    Designed by Ahmed Gawish
-  </footer>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-  <script src="script.js"></script>
+    <header>
+        <h1>A.G Sales Filter</h1>
+    </header>
+    <div class="container">
+        <p>Upload your Excel file, select your territory and product name, and view your sales data.</p>
+        <input type="file" id="upload" accept=".xlsx, .xls" />
+        <br><br>
+        
+        <label for="territory">Select Territory:</label>
+        <select id="territory" class="select2" multiple="multiple" style="width: 100%;" placeholder="Select Territory"></select>
+        <br><br>
+        
+        <label for="product">Select Product:</label>
+        <select id="product" class="select2" multiple="multiple" style="width: 100%;" placeholder="Select Product"></select>
+        <br><br>
+        
+        <button onclick="filterData()">Filter Data</button>
+        <table id="results"></table>
+    </div>
+    <footer>
+        Designed by Ahmed Gawish
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
