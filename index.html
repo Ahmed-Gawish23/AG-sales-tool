@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A.G Sales Filter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1 class="site-title">A.G Sales Filter</h1>
+        <p class="description">Upload your Excel file, select your territory and product name, and view your sales data.</p>
+    </header>
+
+    <main>
+        <div class="upload-section">
+            <label for="file-upload">Upload Excel File:</label>
+            <input type="file" id="file-upload" accept=".xlsx, .xls">
+        </div>
+
+        <div class="filters">
+            <label for="territory">Select Territory:</label>
+            <select id="territory" multiple>
+                <option value="" disabled selected>Select a file first</option>
+            </select>
+
+            <label for="product">Select Product:</label>
+            <select id="product" multiple>
+                <option value="" disabled selected>Select a file first</option>
+            </select>
+        </div>
+
+        <button id="filter-btn">Filter</button>
+
+        <div id="output-section">
+            <h2>Filtered Data</h2>
+            <table id="filtered-data">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <p class="footer-text">Designed by Ahmed Gawish</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
