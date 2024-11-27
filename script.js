@@ -20,7 +20,6 @@ function handleFile(event) {
 }
 
 function handleHeader(rows) {
-    // Skip merged headers if present
     const headerRowIndex = rows.findIndex(row => row.some(cell => typeof cell === 'string' && cell.toLowerCase().includes('territory')));
     if (headerRowIndex === -1) {
         alert('Invalid file format!');
@@ -28,8 +27,6 @@ function handleHeader(rows) {
     }
 
     data = rows.slice(headerRowIndex + 1);
-
-    // Dynamically detect column names
     columnMap = detectColumns(rows[headerRowIndex]);
     populateFilters(data, columnMap);
 }
@@ -50,11 +47,24 @@ function populateFilters(data, columns) {
 
     populateDropdown('territory', territories);
     populateDropdown('product', products);
+
+    // Initialize Select2
+    $('#territory, #product').select2({
+        placeholder: "Select an option",
+        allowClear: true,
+        width: '100'
+    });
 }
 
 function populateDropdown(id, items) {
     const select = document.getElementById(id);
     select.innerHTML = '';
+    const selectAllOption = document.createElement('option');
+    selectAllOption.value = 'select-all';
+    selectAllOption.textContent = 'Select All';
+    selectAllOption.dataset.selectAll = true;
+    select.appendChild(selectAllOption);
+
     items.forEach(item => {
         const option = document.createElement('option');
         option.value = item;
@@ -66,8 +76,8 @@ function populateDropdown(id, items) {
 document.getElementById('filter-btn').addEventListener('click', filterData);
 
 function filterData() {
-    const selectedTerritories = Array.from(document.getElementById('territory').selectedOptions).map(option => option.value);
-    const selectedProducts = Array.from(document.getElementById('product').selectedOptions).map(option => option.value);
+    const selectedTerritories = getSelectedValues('territory');
+    const selectedProducts = getSelectedValues('product');
 
     const filtered = data.filter(row =>
         selectedTerritories.includes(row[columnMap.territory]) &&
@@ -77,19 +87,49 @@ function filterData() {
     displayFilteredData(filtered);
 }
 
+function getSelectedValues(id) {
+    const selectedOptions = Array.from(document.getElementById(id).selectedOptions);
+    const allSelected = selectedOptions.some(opt => opt.value === 'select-all');
+    const values = selectedOptions.map(opt => opt.value);
+
+    if (allSelected) {
+        const allOptions = Array.from(document.getElementById(id).options);
+        return allOptions.filter(opt => opt.value !== 'select-all').map(opt => opt.value);
+    }
+
+    return values;
+}
+
 function displayFilteredData(filteredData) {
     const table = document.getElementById('filtered-data');
+    const aggregatedData = aggregateData(filteredData);
     const headerRow = `<tr>
         <th>Territory</th>
         <th>Product</th>
-        <th>Sales</th>
+        <th>Total Sales</th>
     </tr>`;
-    const rows = filteredData.map(row =>
+    const rows = aggregatedData.map(row =>
         `<tr>
-            <td>${row[columnMap.territory]}</td>
-            <td>${row[columnMap.product]}</td>
-            <td>${row[columnMap.sales]}</td>
+            <td>${row.territory}</td>
+            <td>${row.product}</td>
+            <td>${row.totalSales}</td>
         </tr>`
     ).join('');
     table.innerHTML = `<thead>${headerRow}</thead><tbody>${rows}</tbody>`;
+}
+
+function aggregateData(data) {
+    const result = {};
+    data.forEach(row => {
+        const key = `${row[columnMap.territory]}|${row[columnMap.product]}`;
+        if (!result[key]) {
+            result[key] = {
+                territory: row[columnMap.territory],
+                product: row[columnMap.product],
+                totalSales: 0,
+            };
+        }
+        result[key].totalSales += parseFloat(row[columnMap.sales]) || 0;
+    });
+    return Object.values(result);
 }
