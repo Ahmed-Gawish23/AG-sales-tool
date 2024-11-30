@@ -6,7 +6,7 @@
     <title>A.G Sales Filter</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
-        /* نفس التنسيقات السابقة */
+        /* تنسيق الصفحة */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -49,12 +49,44 @@
             transition: background-color 0.3s;
         }
 
+        button#filter-btn:hover {
+            background-color: #45a049;
+        }
+
         footer {
             background: #000;
             color: white;
             padding: 10px;
             text-align: center;
             margin-top: 20px;
+        }
+
+        /* تنسيق الجدول */
+        #filtered-data {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #filtered-data th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        #filtered-data td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        #filtered-data tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #filtered-data tr:hover {
+            background-color: #ddd;
         }
     </style>
 </head>
@@ -161,14 +193,6 @@
                     });
 
                     $('#territory, #product').select2();
-
-                    // التعامل مع Select All
-                    $('#territory, #product').on("select2:select", function (e) {
-                        const selectAllOption = $(this).find('option[value="all"]');
-                        if (e.params.data.id === "all") {
-                            $(this).val(selectAllOption.length ? "all" : "").trigger("change");
-                        }
-                    });
 
                     document.getElementById("filter-btn").addEventListener("click", () => {
                         const selectedItems = $('#product').val();
