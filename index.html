@@ -132,11 +132,14 @@
                     let validRowIndex = jsonData.findIndex(row =>
                         row.includes("Territory Name") ||
                         row.includes("ZONE_NAME") ||
+                        row.includes("Branch Name") ||
                         row.includes("Item Name") ||
                         row.includes("Product Name") ||
                         row.includes("PRODUCT_NAME") ||
+                        row.includes("Item name") ||
                         row.includes("Sales") ||
                         row.includes("QTY") ||
+                        row.includes("Sales Quantity") ||
                         row.includes("NET_QUANTITY")
                     );
 
@@ -158,17 +161,21 @@
                     let columnMapping = {};
                     const columnNames = Object.keys(validData[0]);
 
+                    // التحقق من أسماء الأعمدة وتحديد الأعمدة الرئيسية
                     if (columnNames.includes("Product Name") && columnNames.includes("Territory Name") && columnNames.includes("Sales")) {
                         columnMapping = { item: "Product Name", territory: "Territory Name", qty: "Sales" };
                     } else if (columnNames.includes("Item Name") && columnNames.includes("Territory Name") && columnNames.includes("QTY")) {
                         columnMapping = { item: "Item Name", territory: "Territory Name", qty: "QTY" };
                     } else if (columnNames.includes("PRODUCT_NAME") && columnNames.includes("ZONE_NAME") && columnNames.includes("NET_QUANTITY")) {
                         columnMapping = { item: "PRODUCT_NAME", territory: "ZONE_NAME", qty: "NET_QUANTITY" };
+                    } else if (columnNames.includes("Item name") && columnNames.includes("Branch Name") && columnNames.includes("Sales Quantity")) {
+                        columnMapping = { item: "Item name", territory: "Branch Name", qty: "Sales Quantity" };
                     } else {
                         alert("Unknown file format");
                         return;
                     }
 
+                    // استخراج العناصر والمناطق
                     const items = [...new Set(validData.map(row => row[columnMapping.item]).filter(Boolean))].sort();
                     const territories = [...new Set(validData.map(row => row[columnMapping.territory]).filter(Boolean))].sort();
 
