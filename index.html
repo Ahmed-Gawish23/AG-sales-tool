@@ -6,7 +6,7 @@
     <title>A.G Sales Filter</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
-        /* تنسيق الموقع العام */
+        /* نفس التنسيقات السابقة */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -31,49 +31,14 @@
 
         label {
             font-weight: bold;
-            font-size: 18px; /* تكبير حجم النص */
+            font-size: 18px;
             margin-bottom: 10px;
             display: block;
-        }
-
-        #filtered-data-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        #filtered-data {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        #filtered-data th {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-
-        #filtered-data td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        #filtered-data tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        #filtered-data tr:hover {
-            background-color: #ddd;
         }
 
         button#filter-btn {
             display: block;
-            margin: 20px auto 0; /* مسافة علوية وأفقية متساوية */
+            margin: 20px auto 0;
             padding: 10px 20px;
             font-size: 16px;
             color: white;
@@ -84,20 +49,12 @@
             transition: background-color 0.3s;
         }
 
-        button#filter-btn:hover {
-            background-color: #45a049;
-        }
-
         footer {
             background: #000;
             color: white;
             padding: 10px;
             text-align: center;
             margin-top: 20px;
-        }
-
-        footer p {
-            margin: 0;
         }
     </style>
 </head>
@@ -186,8 +143,8 @@
                     const itemSelect = document.getElementById("product");
                     const territorySelect = document.getElementById("territory");
 
-                    itemSelect.innerHTML = "";
-                    territorySelect.innerHTML = "";
+                    itemSelect.innerHTML = "<option value='all'>Select All</option>";
+                    territorySelect.innerHTML = "<option value='all'>Select All</option>";
 
                     items.forEach(item => {
                         const option = document.createElement("option");
@@ -203,16 +160,23 @@
                         territorySelect.appendChild(option);
                     });
 
-                    $('#territory').select2();
-                    $('#product').select2();
+                    $('#territory, #product').select2();
+
+                    // التعامل مع Select All
+                    $('#territory, #product').on("select2:select", function (e) {
+                        const selectAllOption = $(this).find('option[value="all"]');
+                        if (e.params.data.id === "all") {
+                            $(this).val(selectAllOption.length ? "all" : "").trigger("change");
+                        }
+                    });
 
                     document.getElementById("filter-btn").addEventListener("click", () => {
-                        const selectedItems = Array.from(itemSelect.selectedOptions).map(option => option.value);
-                        const selectedTerritories = Array.from(territorySelect.selectedOptions).map(option => option.value);
+                        const selectedItems = $('#product').val();
+                        const selectedTerritories = $('#territory').val();
 
                         const filteredData = validData.filter(row =>
-                            selectedItems.includes(row[columnMapping.item]) &&
-                            selectedTerritories.includes(row[columnMapping.territory])
+                            (selectedItems.includes("all") || selectedItems.includes(row[columnMapping.item])) &&
+                            (selectedTerritories.includes("all") || selectedTerritories.includes(row[columnMapping.territory]))
                         );
 
                         const aggregatedData = {};
