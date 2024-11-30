@@ -215,6 +215,15 @@
                             selectedTerritories.includes(row[columnMapping.territory])
                         );
 
+                        const aggregatedData = {};
+                        filteredData.forEach(row => {
+                            const key = `${row[columnMapping.territory]} - ${row[columnMapping.item]}`;
+                            if (!aggregatedData[key]) {
+                                aggregatedData[key] = { territory: row[columnMapping.territory], product: row[columnMapping.item], qty: 0 };
+                            }
+                            aggregatedData[key].qty += parseInt(row[columnMapping.qty], 10) || 0;
+                        });
+
                         const output = document.getElementById("filtered-data");
                         output.innerHTML = `
                             <tr>
@@ -224,12 +233,12 @@
                             </tr>
                         `;
 
-                        filteredData.forEach(row => {
+                        Object.values(aggregatedData).forEach(({ territory, product, qty }) => {
                             const tr = document.createElement("tr");
                             tr.innerHTML = `
-                                <td>${row[columnMapping.territory]}</td>
-                                <td>${row[columnMapping.item]}</td>
-                                <td>${row[columnMapping.qty]}</td>
+                                <td>${territory}</td>
+                                <td>${product}</td>
+                                <td>${qty}</td>
                             `;
                             output.appendChild(tr);
                         });
