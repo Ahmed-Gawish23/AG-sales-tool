@@ -29,6 +29,13 @@
             margin: auto;
         }
 
+        label {
+            font-weight: bold;
+            font-size: 18px; /* تكبير حجم النص */
+            margin-bottom: 10px;
+            display: block;
+        }
+
         #filtered-data-title {
             font-size: 18px;
             font-weight: bold;
@@ -37,7 +44,6 @@
             text-align: center;
         }
 
-        /* تنسيق الجدول */
         #filtered-data {
             width: 100%;
             border-collapse: collapse;
@@ -67,7 +73,7 @@
 
         button#filter-btn {
             display: block;
-            margin: 20px auto;
+            margin: 20px auto 0; /* مسافة علوية وأفقية متساوية */
             padding: 10px 20px;
             font-size: 16px;
             color: white;
@@ -82,7 +88,6 @@
             background-color: #45a049;
         }
 
-        /* تنسيق الفوتر */
         footer {
             background: #000;
             color: white;
@@ -104,7 +109,6 @@
     <main>
         <div>
             <input type="file" id="file-upload" accept=".xls, .xlsx" />
-            <button id="filter-btn">Filter Data</button>
         </div>
         <div>
             <label for="territory">Select Territory:</label>
@@ -112,6 +116,7 @@
             <label for="product">Select Product:</label>
             <select id="product" multiple></select>
         </div>
+        <button id="filter-btn">Filter Data</button>
         <div id="filtered-data-title">Filtered Data</div>
         <table id="filtered-data">
             <!-- سيتم إضافة البيانات هنا -->
