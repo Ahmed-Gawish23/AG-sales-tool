@@ -81,6 +81,19 @@
         button#filter-btn:hover {
             background-color: #45a049;
         }
+
+        /* تنسيق الفوتر */
+        footer {
+            background: #000;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        footer p {
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -200,23 +213,18 @@
                         const output = document.getElementById("filtered-data");
                         output.innerHTML = `
                             <tr>
-                                <th>Product - Territory</th>
-                                <th>Quantity</th>
+                                <th>Territory</th>
+                                <th>Product</th>
+                                <th>Sales</th>
                             </tr>
                         `;
 
-                        const result = {};
                         filteredData.forEach(row => {
-                            const key = `${row[columnMapping.item]} - ${row[columnMapping.territory]}`;
-                            if (!result[key]) result[key] = 0;
-                            result[key] += row[columnMapping.qty];
-                        });
-
-                        Object.entries(result).forEach(([key, qty]) => {
                             const tr = document.createElement("tr");
                             tr.innerHTML = `
-                                <td>${key}</td>
-                                <td>${qty}</td>
+                                <td>${row[columnMapping.territory]}</td>
+                                <td>${row[columnMapping.item]}</td>
+                                <td>${row[columnMapping.qty]}</td>
                             `;
                             output.appendChild(tr);
                         });
